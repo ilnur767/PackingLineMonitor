@@ -3,7 +3,7 @@ PackingLineMonitor - Эмулятор фасовочной линии
 ## Как запустить эмулятор и нормализатор
 
 Для запуска эмулятора и нормализатора необходимо:
-Перейти в корневую папку в терминале, выполнить команды `docker -compose up -d` а затем `dotnet run --project .\src\PackingLineMonitor.Presentation`
+Перейти в корневую папку в терминале, выполнить команды `docker-compose up -d` и дождаться создания бд, а затем `dotnet run --project .\src\PackingLineMonitor.Presentation`
 
 ## Реализованные статусы линии
 

@@ -24,8 +24,6 @@ public sealed class PackingLineMonitorDbContext : DbContext
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
     {
         optionsBuilder.UseNpgsql(_configuration.GetConnectionString("PackingLineMonitorDb"));
-        optionsBuilder.EnableDetailedErrors();
-        optionsBuilder.EnableSensitiveDataLogging();
         optionsBuilder.UseLoggerFactory(_loggerFactory);
     }
 }
