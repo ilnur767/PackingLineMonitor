@@ -1,0 +1,13 @@
+services:
+  postgres:
+    container_name: packing_line_postgres
+    image: postgres:17
+    restart: on-failure
+    environment:
+      POSTGRES_DB: packing_line_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+        - 5432:5432
+    volumes:
+      - ../postgres-data:/var/lib/postgresql/data

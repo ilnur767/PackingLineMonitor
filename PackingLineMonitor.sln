@@ -1,0 +1,51 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{C64761DF-1CF4-4228-BCA2-1EF159DA5DD0}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "tests", "tests", "{7C73645A-AC97-4E47-B87F-8624A784354F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PackingLineMonitor.Domain", "src\PackingLineMonitor.Domain\PackingLineMonitor.Domain.csproj", "{3BF91D70-FF74-4B67-BB42-E3E9FB5C018D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PackingLineMonitor.Application", "src\PackingLineMonitor.Application\PackingLineMonitor.Application.csproj", "{CE0EDEBC-0524-4AC2-A6BF-5B5946B59969}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PackingLineMonitor.Presentation", "src\PackingLineMonitor.Presentation\PackingLineMonitor.Presentation.csproj", "{CAD360D0-E016-4701-97AB-DCDF4CF22E58}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PackingLineMonitor.Infrastructure", "src\PackingLineMonitor.Infrastructure\PackingLineMonitor.Infrastructure.csproj", "{7CE659A6-4B0E-4630-9397-4EAD9A118194}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PackingLineMonitor.DataEmulator", "src\PackingLineMonitor.DataEmulator\PackingLineMonitor.DataEmulator.csproj", "{BE3119D9-F449-444D-A337-FC661A1E2109}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3BF91D70-FF74-4B67-BB42-E3E9FB5C018D} = {C64761DF-1CF4-4228-BCA2-1EF159DA5DD0}
+		{CE0EDEBC-0524-4AC2-A6BF-5B5946B59969} = {C64761DF-1CF4-4228-BCA2-1EF159DA5DD0}
+		{CAD360D0-E016-4701-97AB-DCDF4CF22E58} = {C64761DF-1CF4-4228-BCA2-1EF159DA5DD0}
+		{7CE659A6-4B0E-4630-9397-4EAD9A118194} = {C64761DF-1CF4-4228-BCA2-1EF159DA5DD0}
+		{BE3119D9-F449-444D-A337-FC661A1E2109} = {C64761DF-1CF4-4228-BCA2-1EF159DA5DD0}
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3BF91D70-FF74-4B67-BB42-E3E9FB5C018D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3BF91D70-FF74-4B67-BB42-E3E9FB5C018D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3BF91D70-FF74-4B67-BB42-E3E9FB5C018D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3BF91D70-FF74-4B67-BB42-E3E9FB5C018D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE0EDEBC-0524-4AC2-A6BF-5B5946B59969}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE0EDEBC-0524-4AC2-A6BF-5B5946B59969}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE0EDEBC-0524-4AC2-A6BF-5B5946B59969}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE0EDEBC-0524-4AC2-A6BF-5B5946B59969}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAD360D0-E016-4701-97AB-DCDF4CF22E58}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAD360D0-E016-4701-97AB-DCDF4CF22E58}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAD360D0-E016-4701-97AB-DCDF4CF22E58}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAD360D0-E016-4701-97AB-DCDF4CF22E58}.Release|Any CPU.Build.0 = Release|Any CPU
+		{7CE659A6-4B0E-4630-9397-4EAD9A118194}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{7CE659A6-4B0E-4630-9397-4EAD9A118194}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{7CE659A6-4B0E-4630-9397-4EAD9A118194}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{7CE659A6-4B0E-4630-9397-4EAD9A118194}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BE3119D9-F449-444D-A337-FC661A1E2109}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BE3119D9-F449-444D-A337-FC661A1E2109}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BE3119D9-F449-444D-A337-FC661A1E2109}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BE3119D9-F449-444D-A337-FC661A1E2109}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal
