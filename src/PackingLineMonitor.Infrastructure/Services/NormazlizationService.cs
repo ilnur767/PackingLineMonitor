@@ -15,6 +15,7 @@ public sealed class NormalizationService : INormalizationService
     private const double NominalSpeed = 10000;
     private const double NominalSpeedLimit = NominalSpeed * 0.95;
     private readonly IMessageQueue<LineStatusChangedEvent> _eventMessageQueue;
+    private readonly object _lock = new();
     private readonly ILogger<NormalizationService> _logger;
     private readonly IMessageQueue<LineCounterMeasurement> _measurementMessageQueue;
     private readonly LineCounterMeasurementQueue _queue = new(MaxCount);
@@ -34,96 +35,94 @@ public sealed class NormalizationService : INormalizationService
         _eventMessageQueue = eventMessageQueue;
     }
 
-    public LineStatusDto GetLineStatus()
-    {
-        CalculateSpeed();
-        CalculateLineStatus();
-        TrackStatusChange();
-        return new LineStatusDto(_status.ToString(), _timeProvider.GetUtcNow().UtcDateTime, _speed);
-    }
+    public LineStatusDto GetLineStatus() => new(_status.ToString(), _timeProvider.GetUtcNow().UtcDateTime, _speed);
 
     public async Task ProcessMeasurements(CancellationToken cancellationToken)
     {
+        var calcTask = Task.Run(() => ExecutePeriodicCalculations(cancellationToken), cancellationToken);
+
         while (!cancellationToken.IsCancellationRequested)
         {
-            using CancellationTokenSource timeoutCts = new(TimeSpan.FromSeconds(30));
+            using var timeoutCts = new CancellationTokenSource(TimeSpan.FromSeconds(30));
             try
             {
                 var measurement = await _measurementMessageQueue.ReadAsync(timeoutCts.Token);
                 _queue.Enqueue(measurement);
 
-                CalculateSpeed();
-                CalculateLineStatus(measurement);
-                TrackStatusChange();
+                Recalculate();
             }
             catch (OperationCanceledException)
             {
-                CalculateSpeed();
-                CalculateLineStatus(null);
-                TrackStatusChange();
+                RecalculateIfNoData();
             }
         }
     }
 
-    private void CalculateLineStatus(LineCounterMeasurement? lastMeasurement)
+    private void RecalculateIfNoData()
     {
-        if (lastMeasurement == null)
+        lock (_lock)
         {
             _status = LineStatus.NoData;
             _speed = 0;
             _queue.Clear();
-            return;
+            TrackStatusChange();
         }
-
-        if (_queue.AllEqual())
-        {
-            _status = LineStatus.Stopped;
-            return;
-        }
-
-        if (_speed < NominalSpeedLimit)
-        {
-            _status = LineStatus.LowSpeed;
-            return;
-        }
-
-        _status = LineStatus.Running;
     }
 
-    private void CalculateLineStatus()
+    private void Recalculate()
     {
         if (_status == LineStatus.NoData)
         {
-            return;
+            Calculate(false);
+            TrackStatusChange();
         }
-
-        if (_queue.AllEqual())
-        {
-            _status = LineStatus.Stopped;
-            return;
-        }
-
-        if (_speed < NominalSpeedLimit)
-        {
-            _status = LineStatus.LowSpeed;
-            return;
-        }
-
-        _status = LineStatus.Running;
     }
 
-    private void CalculateSpeed()
+    private async Task? ExecutePeriodicCalculations(CancellationToken cancellationToken)
     {
-        var items = _queue.GetItems().DistinctBy(l => l.Counter).ToList();
-        if (items.Count < 1)
+        while (!cancellationToken.IsCancellationRequested)
         {
-            return;
+            Calculate(true);
+            TrackStatusChange();
+            await Task.Delay(1000, cancellationToken);
         }
+    }
 
-        var elapsed = _timeProvider.GetUtcNow().UtcDateTime - _queue.GetFirst()!.Timestamp;
-        _speed = Math.Round(items.Count / elapsed.TotalSeconds * 3600.0, 1);
+    private void Calculate(bool periodic)
+    {
+        lock (_lock)
+        {
+            if (_status == LineStatus.NoData && periodic)
+            {
+                return;
+            }
 
-        _logger.LogDebug("Line speed: {Speed}", _speed);
+            var items = _queue.GetItems().DistinctBy(l => l.Counter).ToList();
+            if (items.Count < MaxCount)
+            {
+                return;
+            }
+
+            if (_queue.AllEqual())
+            {
+                _status = LineStatus.Stopped;
+                _speed = 0;
+                return;
+            }
+
+            var elapsed = _timeProvider.GetUtcNow().UtcDateTime - _queue.GetFirst()!.Timestamp;
+            _speed = Math.Round(items.Count / elapsed.TotalSeconds * 3600.0, 1);
+
+            _logger.LogDebug("Line speed: {Speed}", _speed);
+
+            if (_speed < NominalSpeedLimit)
+            {
+                _status = LineStatus.LowSpeed;
+                return;
+            }
+
+            _status = LineStatus.Running;
+        }
     }
 
     private void TrackStatusChange()
